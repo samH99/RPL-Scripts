@@ -1,0 +1,36 @@
+-- sam.rpl
+-- Wednesday, January 30, 2019
+
+-- Use this to run tests: rosie test sam.rpl
+
+
+-- Version 1: cannot match two balanced things in sequence like ()()
+
+
+grammar
+   balanced1 = {['] balanced1 [']} / {["] balanced1 ["]} / {[(] balanced1 [)]} / [^()'"]*
+end
+
+-- test balanced1 accepts "()", "(())", "\"foo\"", "foo", "'foo'", ""
+-- test balanced1 accepts "\"()\""
+-- test balanced1 rejects ")", "("
+-- test balanced1 rejects "\"foo'"
+
+-- test balanced1 rejects "()()"
+
+
+-- Version 2 allows sequences via term+, and is not "left recursive", which RPL prohibits
+
+grammar
+   term = {[\[] balanced [\]]} / {[(] balanced [)]} / [^()\[\]]+
+in
+   balanced = term+ / ""
+end
+
+-- test balanced accepts "()", "(())", "[foo]", "foo", "[foo]", ""
+-- test balanced accepts "[()]"
+-- test balanced rejects ")", "("
+-- test balanced rejects "[foo)"
+
+-- test balanced accepts "([([Hi])]())"
+

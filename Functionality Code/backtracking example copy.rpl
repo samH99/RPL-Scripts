@@ -1,0 +1,17 @@
+-- BACKREF ex
+
+pattern = {"a"?"a"?"a"?"a"?"aaaa"}
+pattern2 = {"aaaa""a"?"a"?"a"?"a"?}
+
+grammar
+   term = "a" / ""
+in
+   pattern3 = term+
+end
+
+
+-- test pattern accepts "aaaaaaaa"
+-- test pattern rejects "aaaaaaaaa", "aaaaaaa", "aaaaaa", "aaaaa", "aaaa", "aaa"
+
+-- test pattern2 accepts "aaaaaaaa", "aaaaaaa", "aaaaaa", "aaaaa", "aaaa"
+-- test pattern rejects "aaaaaaaaa", "aaa"

@@ -1,0 +1,36 @@
+-- INPUT: (((a)))
+
+--   thing1 .. thing1 .. thing1   (((a -> # b) # c) # d) # e
+--   thing1 .. thing1 .. thing2   (((a -> @ b) # c) # d)
+--   thing1 .. thing1 .. unit     (((a) -> # c # d))
+--   thing1 .. thing2 .. thing1   (((a -> # b) @ c) # d) ==  (((a) @ <exp> # <exp>) # <exp>)
+--   thing1 .. thing2 .. thing2   (((a -> @ b) @ c) # d) == ((a) @ <exp> @ <exp>) # <exp>)
+--   thing1 .. thing2 .. unit     (((a) -> @ c) # d)
+--   thing1 .. unit .. thing1     ((-> (a # b)) # d)
+--   thing1 .. unit .. thing2     ((-> (a @ b)) # d)
+--   thing1 .. unit .. unit       (((a)) -> # d)
+--   thing2 .. thing1 .. thing1   <as above, another 9 lines>
+--   unit .. thing1 .. thing1     <as above, another 9 lines>
+--   unit .. unit .. unit         <this is the last of the 9 starting with unit>
+
+
+-- This example:
+-- 3 choices x 3 positions = 3^3 possibilities
+
+-- General:
+-- k choices in <exp> definition,
+-- n sets of parens around an id,
+-- giving n^k possibilities.
+-- And since the last possibility is the right one, this input is the worst case scenario.
+
+grammar
+   base = [a-z]
+   paren = [(] exp [)]
+
+   unit = base / paren
+
+   thing1 = unit "#" exp
+   thing2 = unit "@" exp
+in
+   exp = thing1 / thing2 / unit
+end

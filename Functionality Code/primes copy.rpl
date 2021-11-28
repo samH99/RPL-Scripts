@@ -1,0 +1,18 @@
+-- version 1 
+
+-- trying to find the numbers that arent prime, we dont need grammer-in-end structure because there is no recursion
+
+multiple = (..(.+)?) 
+-- does this go one by one... i dont think so-- how to make it go one by one
+
+prime1 = {multiple multiple+} / ".?"
+-- does multiple match the same thing over and over?
+
+-- test prime1 accepts "."
+-- test prime1 accepts ""
+-- test prime1 accepts "...."
+-- test prime1 accepts "......"
+
+-- test prime1 rejects ".."
+-- test prime1 rejects "..."
+-- test prime1 rejects "....."

@@ -1,0 +1,16 @@
+-- UREGEX_CASE_INSENSITIVE/ Pattern.CASE_INSENSITIVE: 
+
+-- If set, matching will take place in a case-insensitive manner.
+
+simple_potato = "potato"
+capital_potato = "POTATO"
+
+shapeshifter_potato = {[pP] [oO] [tT] [aA] [tT] [oO]} -- is this the best way to do this?
+
+-- test simple_potato accepts "potato"
+-- test simple_potato rejects "POTATO"
+
+-- test capital_potato rejects "potato"
+-- test capital_potato accepts "POTATO"
+
+-- test shapeshifter_potato accepts "potato", "POTATO", "poTaTo", "POtatO"

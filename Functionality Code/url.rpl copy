@@ -1,0 +1,9 @@
+url = {scheme (://) authority path query fragment}
+
+scheme = "http"
+authority = [[a-z][A-Z][0-9][:][.][ ][\-]]+
+path = [[a-z][A-Z][0-9][:][.][\][ ][\-]]+
+query = [[a-z][A-Z][0-9][:][.][ ][\-]]+
+fragment = [[a-z][A-Z][0-9][:][.][ ][\-]]+
+
+--test url accepts http://example.com:8042/over/there?name=bar#nose

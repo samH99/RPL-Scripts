@@ -1,0 +1,61 @@
+-- -*- Mode: rpl; -*-                                                                                   
+--
+-- dot.rpl
+--
+
+-- In this file, we redefine . to match any character except newline, in order to emulate the
+-- behavior of some regex engines (by default or by flag setting).
+
+-- We might want to do this:
+--    . = [^\n]
+
+-- But this does not work because Rosie internally converts a complemented character set into a
+-- negative look-ahead, followed by a dot:  "If NOT looking at any of the characters in the
+-- complemented set, consume a single character."
+
+-- So the above definition becomes:
+--  . = {![\n] .}
+-- And the compiler complains that the definition of . is recursive.
+
+-- We get around this by explicitly importing the base pattern environment, and referencing the
+-- definition of . in that package.
+
+-- Side note:
+-- 
+--    Probably this syntactic transformation is not a good one for the RPL compiler to do, because
+--    of exactly the scenario here.  I.e. the user redefines dot, and there's no obvious connection
+--    between dot and (complemented) character sets.
+--
+--    Even worse, the 'rosie expand' command (CLI) does not reveal this particular transformation.  
+
+
+import builtin/prelude as base
+
+-- Looks weird, but the first dot after 'base' is the separator between the 'base' namespace and the
+-- symbol in that namespace, which happens to be '.'.
+any = base..
+
+. = {!"\n" any}
+
+-- test . accepts "a"
+-- test . rejects "", "\n"
+
+-- test any accepts "a", "\n"
+
+-- Finally, let's confirm by experimentation that complemented sets are effectively transformed into
+-- negative lookahead followed by dot.
+
+not_x = [^x]
+
+-- test not_x accepts "a"
+-- test not_x rejects "x", "\n"
+
+anything_but_x = {!"x" any}
+
+-- test anything_but_x accepts "a", "\n"
+-- test anything_but_x rejects "x"
+
+
+
+
+

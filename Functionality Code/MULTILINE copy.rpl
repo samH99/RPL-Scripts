@@ -1,0 +1,55 @@
+-- MULTILINE
+
+-- In this file, we redefine ^, $, and . such that:
+--   . matches a single character EXCEPT newline   <------------ TO DO
+--   ^ matches at the start of the input AND also after a newline
+--   $ matches at the end of the input AND also a newline
+
+-- To make these re-definitions, we need access to the original definitions of these RPL
+-- identifiers.  They are available in the builtin package called 'prelude'.
+
+
+
+---------------------------------
+-- DOLLAR SIGN (end of line)
+---------------------------------
+
+import builtin/prelude as base
+$ = "\n" / base.$
+^ = "\n" / base.^
+
+line = { [^\n]+ $ } / [\n]
+line_test = line+
+
+-- test line_test accepts "asdfjsdfhkk\n", "\n"
+-- test line_test accepts "asdfjsdfhkk\na", "\na"
+-- test line_test rejects "" because there must be at least one line
+
+---------------------------------
+-- CARET (start of line)
+---------------------------------
+
+-- Note: RPL uses ordered choice, unlike regex.  Therefore, we have to put the "\n" alternative
+-- first in the following definition.
+
+
+rest_of_line = [^\n]+
+caret_test = {^ rest_of_line}*
+
+-- test caret_test accepts "\nasdfjsdfhkk", ""
+-- test caret_test accepts "asdfjsdfhkk\nABCDEF", "\na"
+-- test caret_test rejects "\n" because there must be at least one character on the line
+
+entire_line = {^ [^\n]+ $ }
+entire_line_test = line+ / $
+
+-- test entire_line_test accepts "asdfjsdfhkk\n", "\n", ""
+-- test entire_line_test accepts "asdfjsdfhkk\na", "\na"
+
+
+---------------------------------
+-- DOT (any character)
+---------------------------------
+
+-- TODO: (1) redefine . to match any char except newline
+--       (2) In the tests above, use . instead of [^\n]

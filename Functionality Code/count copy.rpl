@@ -1,0 +1,42 @@
+
+-- count.rpl
+
+grammar
+   factor = {. factor / ""} $
+end
+
+-- $ echo "123" | rosie -f count.rpl match -o jsonpp factor
+-- {"e": 4, 
+--  "type": "factor", 
+--  "s": 1, 
+--  "data": "123", 
+--  "subs": 
+--    [{"e": 4, 
+--      "type": "factor", 
+--      "s": 2, 
+--      "data": "23", 
+--      "subs": 
+--        [{"e": 4, 
+--          "type": "factor", 
+--          "s": 3, 
+--          "data": "3"}]}]}
+-- $ echo "123" | rosie -f count.rpl match -o json factor | rosie grep '"factor"'
+-- {"type":"factor","s":1,"subs":[{"type":"factor","s":2,"subs":[{"type":"factor","s":3,"e":4,"data":"3"}],"e":4,"data":"23"}],"e":4,"data":"123"}
+-- $ echo "123" | rosie -f count.rpl match -o json factor | rosie grep -o subs '"factor"'
+-- factor
+-- factor
+-- factor
+-- $ echo "1234" | rosie -f count.rpl match -o json factor | rosie grep -o subs '"factor"'
+-- factor
+-- factor
+-- factor
+-- factor
+-- $ echo "12345" | rosie -f count.rpl match -o json factor | rosie grep -o subs '"factor"'
+-- factor
+-- factor
+-- factor
+-- factor
+-- factor
+-- $ echo "12345" | rosie -f count.rpl match -o json factor | rosie grep -o subs '"factor"' | wc -l
+--        5
+-- $ 

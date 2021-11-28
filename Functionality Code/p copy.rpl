@@ -1,0 +1,16 @@
+
+grammar
+   term = { [(] term? [)] }
+in
+   bal = term+
+end
+
+-- test bal accepts "()", "()()", "()((()))"
+
+
+-- If we want to find all sets of balanced then we can do this:
+-- Find all occurrences of either balanced or some other character
+
+find_bal = findall:{bal/.}
+
+-- test find_bal accepts ")))()"
